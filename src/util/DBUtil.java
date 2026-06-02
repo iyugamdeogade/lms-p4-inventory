@@ -6,23 +6,22 @@ import java.sql.DriverManager;
 public class DBUtil {
 
     private static final String URL = "jdbc:mysql://localhost:3306/inventory_db";
-    private static final String USER = "Cdac";
-
-    // Put your real MySQL password here
-    private static final String PASSWORD = "Cdac@123";
+    private static final String USER = "root";
+    private static final String PASSWORD = "cdac123";
 
     public static Connection getConnection() {
-        Connection con = null;
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Database Connected Successfully");
+
+            return con;
+
         } catch (Exception e) {
             System.out.println("Database Connection Failed");
             e.printStackTrace();
+            return null;
         }
-
-        return con;
     }
 }
