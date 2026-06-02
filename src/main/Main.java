@@ -3,31 +3,95 @@ package main;
 import dao.ProductDAO;
 import entity.Product;
 
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
 
+        Scanner sc = new Scanner(System.in);
+
         ProductDAO dao = new ProductDAO();
 
-        // ADD PRODUCT
-        Product p = new Product(
-                0,
-                "Marker",
-                1,
-                1,
-                15,
-                50,
-                5
-        );
+        while (true) {
 
-        dao.addProduct(p);
+            System.out.println("\n===== INVENTORY TRACKER =====");
 
-        // VIEW PRODUCTS
-        System.out.println("\nPRODUCT LIST:\n");
+            System.out.println("1. Add Product");
+            System.out.println("2. View Products");
+            System.out.println("3. Low Stock Alert");
+            System.out.println("4. Generate HTML Report");
+            System.out.println("5. Exit");
 
-        dao.viewProducts();
+            System.out.print("Enter Choice: ");
 
-        // LOW STOCK ALERT
-        dao.lowStockAlert();
+            int choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+
+                    sc.nextLine();
+
+                    System.out.print("Enter Product Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Category ID: ");
+                    int categoryId = sc.nextInt();
+
+                    System.out.print("Enter Vendor ID: ");
+                    int vendorId = sc.nextInt();
+
+                    System.out.print("Enter Quantity: ");
+                    int quantity = sc.nextInt();
+
+                    System.out.print("Enter Price: ");
+                    double price = sc.nextDouble();
+
+                    System.out.print("Enter Reorder Level: ");
+                    int reorderLevel = sc.nextInt();
+
+                    Product p = new Product(
+                            0,
+                            name,
+                            categoryId,
+                            vendorId,
+                            quantity,
+                            price,
+                            reorderLevel
+                    );
+
+                    dao.addProduct(p);
+
+                    break;
+
+                case 2:
+
+                    dao.viewProducts();
+
+                    break;
+
+                case 3:
+
+                    dao.lowStockAlert();
+
+                    break;
+
+                case 4:
+
+                    dao.generateLowStockHTMLReport();
+
+                    break;
+
+                case 5:
+
+                    System.out.println("Exiting Program...");
+                    System.exit(0);
+
+                default:
+
+                    System.out.println("Invalid Choice");
+            }
+        }
     }
 }

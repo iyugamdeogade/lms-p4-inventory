@@ -103,4 +103,65 @@ public void lowStockAlert() {
 
     }
 }
+// GENERATE HTML REPORT
+public void generateLowStockHTMLReport() {
+
+    try {
+
+        Connection con = DBUtil.getConnection();
+
+        String query =
+                "SELECT * FROM product WHERE quantity < reorder_level";
+
+        PreparedStatement pst =
+                con.prepareStatement(query);
+
+        ResultSet rs = pst.executeQuery();
+
+        java.io.FileWriter writer =
+                new java.io.FileWriter(
+                        "reports/low_stock_alert.html"
+                );
+
+        writer.write(
+                "<html><head><title>Low Stock Report</title></head><body>"
+        );
+
+        writer.write("<h1>Low Stock Products</h1>");
+
+        writer.write(
+                "<table border='1'>"
+        );
+
+        writer.write(
+                "<tr><th>ID</th><th>Name</th><th>Quantity</th><th>Reorder Level</th></tr>"
+        );
+
+        while (rs.next()) {
+
+            writer.write(
+                    "<tr>"
+                    + "<td>" + rs.getInt("product_id") + "</td>"
+                    + "<td>" + rs.getString("product_name") + "</td>"
+                    + "<td>" + rs.getInt("quantity") + "</td>"
+                    + "<td>" + rs.getInt("reorder_level") + "</td>"
+                    + "</tr>"
+            );
+        }
+
+        writer.write("</table>");
+        writer.write("</body></html>");
+
+        writer.close();
+
+        System.out.println(
+                "\nHTML Report Generated Successfully"
+        );
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+    }
+}
 }
