@@ -2,6 +2,7 @@ package main;
 
 import dao.ProductDAO;
 import entity.Product;
+import report.StockReport;
 
 import java.util.Scanner;
 
@@ -12,6 +13,13 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         ProductDAO dao = new ProductDAO();
+
+        // ABSTRACT CLASS + INTERFACE TEST
+        StockReport sr = new StockReport("Inventory Report");
+
+        sr.showTitle();
+        sr.generateReport();
+        sr.printDocument();
 
         while (true) {
 
