@@ -15,7 +15,7 @@ public class Main {
         ProductDAO dao = new ProductDAO();
 
         // ABSTRACT CLASS + INTERFACE TEST
-        StockReport sr = new StockReport("Inventory Report");
+       StockReport sr = new StockReport("Inventory Report");
 
         sr.showTitle();
         sr.generateReport();
