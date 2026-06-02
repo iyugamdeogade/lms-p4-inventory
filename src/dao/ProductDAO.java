@@ -11,16 +11,12 @@ public class ProductDAO {
 
     // INSERT PRODUCT
     public void addProduct(Product product) {
-
         try {
-
             Connection con = DBUtil.getConnection();
 
-            String query =
-                    "INSERT INTO product(product_name, category_id, vendor_id, quantity, price, reorder_level) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO product(product_name, category_id, vendor_id, quantity, price, reorder_level) VALUES (?, ?, ?, ?, ?, ?)";
 
-            PreparedStatement pst =
-                    con.prepareStatement(query);
+            PreparedStatement pst = con.prepareStatement(query);
 
             pst.setString(1, product.getProductName());
             pst.setInt(2, product.getCategoryId());
@@ -34,28 +30,23 @@ public class ProductDAO {
             System.out.println("Product Added Successfully");
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
     }
 
     // VIEW PRODUCTS
     public void viewProducts() {
-
         try {
-
             Connection con = DBUtil.getConnection();
 
             String query = "SELECT * FROM product";
 
-            PreparedStatement pst =
-                    con.prepareStatement(query);
-
+            PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
 
-            while (rs.next()) {
+            System.out.println("\nID | Product Name | Quantity | Price");
 
+            while (rs.next()) {
                 System.out.println(
                         rs.getInt("product_id") + " | " +
                         rs.getString("product_name") + " | " +
@@ -65,103 +56,98 @@ public class ProductDAO {
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
     }
+
     // LOW STOCK ALERT
-public void lowStockAlert() {
+    public void lowStockAlert() {
+        try {
+            Connection con = DBUtil.getConnection();
 
-    try {
+            String query = "SELECT * FROM product WHERE quantity < reorder_level";
 
-        Connection con = DBUtil.getConnection();
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
 
-        String query =
-                "SELECT * FROM product WHERE quantity < reorder_level";
+            System.out.println("\nLOW STOCK PRODUCTS:\n");
 
-        PreparedStatement pst =
-                con.prepareStatement(query);
-
-        ResultSet rs = pst.executeQuery();
-
-        System.out.println("\nLOW STOCK PRODUCTS:\n");
-
-        while (rs.next()) {
-
-            System.out.println(
-                    rs.getInt("product_id") + " | " +
-                    rs.getString("product_name") + " | Qty: " +
-                    rs.getInt("quantity") + " | Reorder Level: " +
-                    rs.getInt("reorder_level")
-            );
-        }
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-
-    }
-}
-// GENERATE HTML REPORT
-public void generateLowStockHTMLReport() {
-
-    try {
-
-        Connection con = DBUtil.getConnection();
-
-        String query =
-                "SELECT * FROM product WHERE quantity < reorder_level";
-
-        PreparedStatement pst =
-                con.prepareStatement(query);
-
-        ResultSet rs = pst.executeQuery();
-
-        java.io.FileWriter writer =
-                new java.io.FileWriter(
-                        "reports/low_stock_alert.html"
+            while (rs.next()) {
+                System.out.println(
+                        rs.getInt("product_id") + " | " +
+                        rs.getString("product_name") + " | Qty: " +
+                        rs.getInt("quantity") + " | Reorder Level: " +
+                        rs.getInt("reorder_level")
                 );
+            }
 
-        writer.write(
-                "<html><head><title>Low Stock Report</title></head><body>"
-        );
-
-        writer.write("<h1>Low Stock Products</h1>");
-
-        writer.write(
-                "<table border='1'>"
-        );
-
-        writer.write(
-                "<tr><th>ID</th><th>Name</th><th>Quantity</th><th>Reorder Level</th></tr>"
-        );
-
-        while (rs.next()) {
-
-            writer.write(
-                    "<tr>"
-                    + "<td>" + rs.getInt("product_id") + "</td>"
-                    + "<td>" + rs.getString("product_name") + "</td>"
-                    + "<td>" + rs.getInt("quantity") + "</td>"
-                    + "<td>" + rs.getInt("reorder_level") + "</td>"
-                    + "</tr>"
-            );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        writer.write("</table>");
-        writer.write("</body></html>");
-
-        writer.close();
-
-        System.out.println(
-                "\nHTML Report Generated Successfully"
-        );
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-
     }
-}
+
+    // GENERATE LOW STOCK HTML REPORT
+    public void generateLowStockHTMLReport() {
+        try {
+            Connection con = DBUtil.getConnection();
+
+            String query = "SELECT * FROM product WHERE quantity < reorder_level";
+
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+
+            java.io.FileWriter writer = new java.io.FileWriter("reports/low_stock_alert.html");
+
+            writer.write("<html><head><title>Low Stock Report</title></head><body>");
+            writer.write("<h1>Low Stock Products</h1>");
+            writer.write("<table border='1'>");
+            writer.write("<tr><th>ID</th><th>Name</th><th>Quantity</th><th>Reorder Level</th></tr>");
+
+            while (rs.next()) {
+                writer.write(
+                        "<tr>"
+                                + "<td>" + rs.getInt("product_id") + "</td>"
+                                + "<td>" + rs.getString("product_name") + "</td>"
+                                + "<td>" + rs.getInt("quantity") + "</td>"
+                                + "<td>" + rs.getInt("reorder_level") + "</td>"
+                                + "</tr>"
+                );
+            }
+
+            writer.write("</table>");
+            writer.write("</body></html>");
+
+            writer.close();
+
+            System.out.println("HTML Report Generated Successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // UPDATE STOCK
+    public void updateStock(int productId, int newQuantity) {
+        try {
+            Connection con = DBUtil.getConnection();
+
+            String query = "UPDATE product SET quantity = ? WHERE product_id = ?";
+
+            PreparedStatement pst = con.prepareStatement(query);
+
+            pst.setInt(1, newQuantity);
+            pst.setInt(2, productId);
+
+            int rows = pst.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Stock Updated Successfully");
+            } else {
+                System.out.println("Product Not Found");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

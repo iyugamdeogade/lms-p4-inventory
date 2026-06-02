@@ -21,7 +21,8 @@ public class Main {
             System.out.println("2. View Products");
             System.out.println("3. Low Stock Alert");
             System.out.println("4. Generate HTML Report");
-            System.out.println("5. Exit");
+            System.out.println("5. Update Stock");
+            System.out.println("6. Exit");
 
             System.out.print("Enter Choice: ");
 
@@ -84,6 +85,18 @@ public class Main {
                     break;
 
                 case 5:
+
+                    System.out.print("Enter Product ID: ");
+                    int pid = sc.nextInt();
+
+                    System.out.print("Enter New Quantity: ");
+                    int qty = sc.nextInt();
+
+                    dao.updateStock(pid, qty);
+
+                    break;
+
+                case 6:
 
                     System.out.println("Exiting Program...");
                     System.exit(0);
