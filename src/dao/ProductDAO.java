@@ -150,4 +150,41 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+    // CATEGORY WISE STOCK REPORT
+public void categoryWiseStockReport() {
+
+    try {
+
+        Connection con = DBUtil.getConnection();
+
+        String query =
+                "SELECT c.category_name, " +
+                "SUM(p.quantity * p.price) AS stock_value " +
+                "FROM product p " +
+                "JOIN category c " +
+                "ON p.category_id = c.category_id " +
+                "GROUP BY c.category_name";
+
+        PreparedStatement pst =
+                con.prepareStatement(query);
+
+        ResultSet rs = pst.executeQuery();
+
+        System.out.println("\nCATEGORY WISE STOCK REPORT:\n");
+
+        while (rs.next()) {
+
+            System.out.println(
+                    rs.getString("category_name")
+                    + " | Stock Value: "
+                    + rs.getDouble("stock_value")
+            );
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+    }
+}
 }

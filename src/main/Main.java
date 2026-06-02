@@ -22,7 +22,8 @@ public class Main {
             System.out.println("3. Low Stock Alert");
             System.out.println("4. Generate HTML Report");
             System.out.println("5. Update Stock");
-            System.out.println("6. Exit");
+            System.out.println("6. Category Wise Stock Report");
+            System.out.println("7. Exit");
 
             System.out.print("Enter Choice: ");
 
@@ -97,6 +98,12 @@ public class Main {
                     break;
 
                 case 6:
+
+                    dao.categoryWiseStockReport();
+
+                    break;
+
+                case 7:
 
                     System.out.println("Exiting Program...");
                     System.exit(0);
