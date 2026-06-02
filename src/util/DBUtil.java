@@ -6,8 +6,10 @@ import java.sql.DriverManager;
 public class DBUtil {
 
     private static final String URL = "jdbc:mysql://localhost:3306/inventory_db";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root"; // change this to your MySQL password
+    private static final String USER = "Cdac";
+
+    // Put your real MySQL password here
+    private static final String PASSWORD = "Cdac@123";
 
     public static Connection getConnection() {
         Connection con = null;
