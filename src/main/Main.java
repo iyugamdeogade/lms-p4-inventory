@@ -9,6 +9,7 @@ public class Main {
 
         ProductDAO dao = new ProductDAO();
 
+        // ADD PRODUCT
         Product p = new Product(
                 0,
                 "Marker",
@@ -21,8 +22,12 @@ public class Main {
 
         dao.addProduct(p);
 
-        System.out.println("\nProduct List:\n");
+        // VIEW PRODUCTS
+        System.out.println("\nPRODUCT LIST:\n");
 
         dao.viewProducts();
+
+        // LOW STOCK ALERT
+        dao.lowStockAlert();
     }
 }

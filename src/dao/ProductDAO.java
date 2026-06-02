@@ -70,4 +70,37 @@ public class ProductDAO {
 
         }
     }
+    // LOW STOCK ALERT
+public void lowStockAlert() {
+
+    try {
+
+        Connection con = DBUtil.getConnection();
+
+        String query =
+                "SELECT * FROM product WHERE quantity < reorder_level";
+
+        PreparedStatement pst =
+                con.prepareStatement(query);
+
+        ResultSet rs = pst.executeQuery();
+
+        System.out.println("\nLOW STOCK PRODUCTS:\n");
+
+        while (rs.next()) {
+
+            System.out.println(
+                    rs.getInt("product_id") + " | " +
+                    rs.getString("product_name") + " | Qty: " +
+                    rs.getInt("quantity") + " | Reorder Level: " +
+                    rs.getInt("reorder_level")
+            );
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+    }
+}
 }
