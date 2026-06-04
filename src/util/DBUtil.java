@@ -1,29 +1,32 @@
 package util;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBUtil {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/inventory_db";
-    private static final String USER = "root";
-    private static final String PASSWORD = "Yugam@1234";
+    private static final String URL;
+    private static final String USER;
+    private static final String PASSWORD;
 
-    public static Connection getConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Database Connected Successfully");
-
-            return con;
-
+    static {
+        Properties props = new Properties();
+        try (InputStream in = DBUtil.class.getClassLoader().getResourceAsStream("db.properties")) {
+            if (in != null) {
+                props.load(in);
+            }
         } catch (Exception e) {
-            System.out.println("Database Connection Failed");
-            e.printStackTrace();
-            return null;
+            System.out.println("[DBUtil] db.properties not found, using hardcoded defaults.");
         }
+        URL      = props.getProperty("db.url",      "jdbc:mysql://localhost:3306/inventory_db");
+        USER     = props.getProperty("db.user",     "root");
+        PASSWORD = props.getProperty("db.password", "Yugam@1234");
     }
-    
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
 }
