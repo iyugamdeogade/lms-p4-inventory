@@ -1,0 +1,16 @@
+# Compiled class files
+*.class
+out/
+bin/
+
+# DB credentials - NEVER commit this
+src/db.properties
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
